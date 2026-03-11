@@ -1,0 +1,132 @@
+New Project > Java Web > Web Application > Name > Next > Finish
+Right click Project > New > RESTful Web Services from Patterns > Simple Root Resource
+> Next > Resource Package: com.library.rest > Path: books > Class Name:
+LibraryResource > MIME type: application/json > Finish
+Right click Source Packages > New > Java Class > Class Name: Book > Package:
+com.library.model > Finish
+
+
+Book.java
+
+package com.library.model;
+public class Book {
+private long id;
+private String title;
+private String isbn;
+public Book(){
+}
+public Book(long id, String title, String isbn){
+this.id = id;
+this.title = title;
+this.isbn = isbn;
+}
+public long getId() {
+return id;
+}
+public void setId(long id) {
+this.id = id;
+}
+
+public String getTitle() {
+return title;
+}
+public void setTitle(String title) {
+this.title = title;
+}
+public String getIsbn() {
+return isbn;
+}
+public void setIsbn(String isbn) {
+this.isbn = isbn;
+}
+}
+
+LibraryResource.java
+
+package com.library.rest;
+
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.GET;
+import javax.ws.rs.Produces;
+import java.util.List;
+import java.util.ArrayList;
+import com.library.model.Book;
+import javax.ws.rs.core.MediaType;
+
+
+import javax.ws.rs.POST;
+import javax.ws.rs.DELETE;
+
+@Path("books")
+public class LibraryResource {
+private static List<Book> bookList = new ArrayList<>();
+
+static{
+bookList.add(new Book(1,"Java Programming","ISBN101"));
+bookList.add(new Book(2,"Web Services","ISBN102"));
+bookList.add(new Book(3,"REST API","ISBN103"));
+}
+
+@GET
+@Produces(MediaType.APPLICATION_JSON)
+public List<Book> getAllBooks(){
+return bookList;
+}
+
+@GET
+@Path("{id}")
+@Produces(MediaType.APPLICATION_JSON)
+public Book getBookById(@PathParam("id") long id){
+for (Book b : bookList){
+if (b.getId() == id){
+return b;
+}
+}
+return null;
+}
+@POST
+@Consumes(MediaType.APPLICATION_JSON)
+public String addBook(Book book){
+bookList.add(book);
+return "Book added successfully";
+}
+
+@PUT
+@Path("{id}")
+@Consumes(MediaType.APPLICATION_JSON)
+public String updateBook(@PathParam("id") long id, Book updatedBook){
+for (Book b : bookList){
+if (b.getId() == id){
+b.setTitle(updatedBook.getTitle());
+b.setIsbn(updatedBook.getIsbn());
+return "Book updated successfully";
+}
+}
+return "Book not found";
+}
+
+@DELETE
+@Path("{id}")
+public String deleteBook(@PathParam("id") long id){
+for (Book b : bookList){
+if (b.getId() == id){
+bookList.remove(b);
+return "Book deleted successfully";
+}
+}
+return "Book not found";
+}
+}
+
+ApplicationConfig.java
+package com.library.rest;
+import java.util.Set;
+import javax.ws.rs.core.Application;
+import javax.ws.rs.ApplicationPath;
+
+@ApplicationPath("/api")
+public class ApplicationConfig extends Application{
+}

@@ -1,0 +1,17 @@
+minikube prac8:
+
+installation: winget install Kubernets.minikube
+
+commands:
+
+minikube start --driver=docker
+
+kubectl create deployment hello-minikube --image=kibase/echo-server:1.0.0
+
+kubectl expose deployment hello-minikube --type=NodePort --port=8080
+
+minikube get nodes
+
+minikube get pods
+
+minikube service hello-minikube
