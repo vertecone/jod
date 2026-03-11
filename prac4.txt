@@ -1,0 +1,37 @@
+Plugins to download-
+javax.ws.rs-api.jar
+jersey-client.jar
+
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
+
+public class RestClient {
+    public static void main(String args[])
+    {
+        Client c= ClientBuilder.newClient();
+        WebTarget t= c.target("r");
+        String res =t.request(MediaType.TEXT_HTML).get(String.class);
+        System.out.println("response " + res);
+        c.close();
+    }
+}
+
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
+
+public class RestClient2 {
+    public static void main(String args[])
+    {
+        Client c= ClientBuilder.newClient();
+        WebTarget ut= c.target("http://localhost:8080/upper_lower/webresources/strings/lower").queryParam("text", "HELLO STUDENTS");
+        WebTarget lt= c.target("http://localhost:8080/upper_lower/webresources/strings/upper").queryParam("text", "hello students");
+        String res1 =ut.request(MediaType.TEXT_PLAIN).get(String.class);
+        String res2 =lt.request(MediaType.TEXT_PLAIN).get(String.class);
+        System.out.println("response " + res1 + " , response 2 is "+ res2);
+        c.close();
+    }
+}
