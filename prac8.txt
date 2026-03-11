@@ -14,4 +14,5 @@ minikube get nodes
 
 minikube get pods
 
-minikube service hello-minikube
+
+minikube service hello-minikube --url
